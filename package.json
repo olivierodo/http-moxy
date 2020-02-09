@@ -6,7 +6,11 @@
   "scripts": {
     "start": "node index.js",
     "start:dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint:fix": "standard --fix",
+    "lint": "standard",
+    "test": "jest",
+    "test:watch": "jest --watch --coverage",
+    "test:coverage": "jest --coverage"
   },
   "keywords": [
     "api",
@@ -24,7 +28,9 @@
     "memory-cache": "^0.2.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "jest": "^25.1.0",
+    "nodemon": "^2.0.2",
+    "standard": "^14.3.1"
   },
   "repository": {
     "type": "git",
@@ -33,5 +39,13 @@
   "bugs": {
     "url": "https://github.com/restqa/e2e-mock-server/issues"
   },
-  "homepage": "https://github.com/restqa/e2e-mock-server#readme"
+  "homepage": "https://github.com/restqa/e2e-mock-server#readme",
+  "standard": {
+    "globals": [
+      "$"
+    ],
+    "env": [
+      "jest"
+    ]
+  }
 }

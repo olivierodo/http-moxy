@@ -1,4 +1,4 @@
-function requestId(req, res, next) {
+function requestId (req, res, next) {
   let err
   req.id = req.headers['request-id']
   if (!req.id) err = 'The request header is missing the request-id value'
@@ -10,7 +10,6 @@ function errors (err, req, res, next) {
     .status(500)
     .json({ message: err.message || err })
 }
-
 
 module.exports = {
   bodyParser: require('body-parser'),

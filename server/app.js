@@ -8,4 +8,3 @@ module.exports = express()
   .use(Middlewares.helmet)
   .use(Routes)
   .use(Middlewares.errors)
-
