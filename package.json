@@ -1,0 +1,37 @@
+{
+  "name": "@restqa/e2e-mock-server",
+  "version": "1.0.0",
+  "description": "A light mock server, meant to mock external dependencies to support the Quality Assurance",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "start:dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "api",
+    "mock",
+    "server",
+    "qa"
+  ],
+  "author": "olivier rodomond",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "helmet": "^3.21.2",
+    "js-yaml": "^3.13.1",
+    "memory-cache": "^0.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/restqa/e2e-mock-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/restqa/e2e-mock-server/issues"
+  },
+  "homepage": "https://github.com/restqa/e2e-mock-server#readme"
+}
