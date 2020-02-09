@@ -19,3 +19,9 @@ jobs:
     - run: npm test
       env:
         CI: true
+    - name: Publish Docker
+      uses: elgohr/Publish-Docker-Github-Action@2.12
+      with:
+        name: restqa/e2e-mock-server
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
