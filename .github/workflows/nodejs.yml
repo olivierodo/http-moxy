@@ -16,9 +16,9 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm install
     - run: npm run lint
-#    - run: npm test
-#      env:
-#        CI: true
+    - run: npm test
+      env:
+        CI: true
   docker-build:
     needs: build
     runs-on: ubuntu-latest
