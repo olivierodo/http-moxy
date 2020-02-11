@@ -15,6 +15,7 @@ express.Router = function () {
   instance.put = jest.fn().mockReturnValue(instance)
   instance.patch = jest.fn().mockReturnValue(instance)
   instance.delete = jest.fn().mockReturnValue(instance)
+  instance.head = jest.fn().mockReturnValue(instance)
   instance.all = jest.fn().mockReturnValue(instance)
   return instance
 }

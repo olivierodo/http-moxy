@@ -9,20 +9,22 @@ describe('#routes', () => {
     const Controllers = require('./controllers')
     jest.mock('./controllers')
 
-    const Middlewares = require('./middlewares')
-    jest.mock('./middlewares')
-
-    Controllers.inspect = 'c.inspect'
-    Controllers.mock = 'c.mock'
-
-    Middlewares.requestId = 'mw.reqId'
+    Controllers.getRequest = 'c.getRequest'
+    Controllers.createRequest = 'c.createRequest'
 
     const Routes = require('./routes')
 
     expect(Routes.get.mock.calls.length).toBe(1)
-    expect(Routes.get.mock.calls[0]).toEqual(['/_/:id', 'c.inspect'])
+    expect(Routes.get.mock.calls[0]).toEqual(['/:id', 'c.getRequest'])
 
-    expect(Routes.all.mock.calls.length).toBe(1)
-    expect(Routes.all.mock.calls[0]).toEqual(['*', 'mw.reqId', 'c.mock'])
+    expect(Routes.post.mock.calls.length).toBe(1)
+    expect(Routes.post.mock.calls[0]).toEqual(['/:id', 'c.createRequest'])
+
+    expect(Routes.all.mock.calls.length).toBe(0)
+    expect(Routes.put.mock.calls.length).toBe(0)
+    expect(Routes.patch.mock.calls.length).toBe(0)
+    expect(Routes.options.mock.calls.length).toBe(0)
+    expect(Routes.head.mock.calls.length).toBe(0)
+    expect(Routes.delete.mock.calls.length).toBe(0)
   })
 })

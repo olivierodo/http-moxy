@@ -1,4 +1,4 @@
-const cache = require('memory-cache')
+const Storage = require('./services/storage')
 
 function createRequest (req, res, next) {
   const { mock } = req.body
@@ -11,12 +11,15 @@ function createRequest (req, res, next) {
     id: req.params.id,
     ...req.body
   }
-  cache.put(request.id, request, 600000) // 10 min
-  res.status(201).json(request)
+
+  Storage.put(request.id, request, 600000) // 10 min
+  res
+    .status(201)
+    .json(request)
 }
 
 function getRequest (req, res, next) {
-  const request = cache.get(req.params.id) || {}
+  const request = Storage.get(req.params.id) || {}
   res.json(request)
 }
 

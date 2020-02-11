@@ -1,10 +1,12 @@
-const cache = require('memory-cache')
+const Storage = require('./services/storage')
 
 module.exports = {
-  summary: 'a rule to hack response',
+  summary: 'A rule to manage to mock by request id',
   * beforeSendRequest (req) {
     const reqId = req.requestOptions.headers['request-id']
-    let request = cache.get(reqId)
+    if (!reqId) return null
+
+    let request = Storage.get(reqId)
     if (!request) return null
 
     request = {
@@ -17,7 +19,7 @@ module.exports = {
       mock: request.mock
     }
 
-    cache.put(reqId, request, 600000) // 10 min
+    Storage.put(reqId, request, 600000) // 10 min
     return {
       response: request.mock
     }
