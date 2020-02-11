@@ -1,9 +1,9 @@
 name: CI
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
-  tests:
+  build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -19,3 +19,15 @@ jobs:
     - run: npm test
       env:
         CI: true
+  docker-build:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Publish Docker
+      uses: elgohr/Publish-Docker-Github-Action@2.12
+      with:
+        name: restqa/http-moxy
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        auto_tag: true
