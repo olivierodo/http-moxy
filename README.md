@@ -1,25 +1,37 @@
 # HTTP Moxy (WIP)
 
-> A light mock http proxy supporting your E2E automation test to mock external dependencies through an http_proxy (inspired by https://httpdump.io)
+> A light mock http proxy tool to support your End to End automation test. The best way to  mock external API dependencies through (inspired by https://httpdump.io)
 
 ## Description
 
 ### What is the problem we try to solve ?
 
-Test automation are great, we all love it. However nowaday we all relay a lof on Saas services to extend our business or fasten our delivery (ex: google map, firebase, twilio)
-From a development perspective those tool are awesome, from a test perspective... It's another challenge to test the E2E product...
-We all know that dependencies are the real challenge on E2E tests.
+Test automation is the key component of a software quality, we all love it. However nowaday we all relay a lot on Saas services to fasten our product delivery (ex: google map, firebase, twilio, etc...)
+From a development perspective those tool are awesome, but from a test automation perspective... This is where the challenge start.
 
-This is where **HTTP MOXY** comes into the picture.
+**In the E2E automation tests world External dependencies are HELL!!!**
 
-**Http Moxy** is just a simple http proxy __BUT__ it provides an ability to mock the http request.
+This is how  **HTTP MOXY** starts growing in our mind... To solve that remaining pain.
 
-The Http Moxy tool is born from understanding that external dependencies are not a part of our scope... They supposed to have their own End to End test, **however** it's a part of our scope to test the mapping from our business object to the external object.
-Luckely **Rest APIs** are now a key standard to connect 2 systems together. Then the http moxy is borned.
+Basically **Http Moxy** is just a simple http proxy __BUT__ it provides an ability to mock the http request.
+
+As a http proxy, *Moxy* doesn't bring any changes in  the way software engineers are coding.
+
+
+### Fundamentals
+
+**Http Moxy** is born from the insight that as a business project QA, external dependencies are not a part of my scope... Why should i test again the external service (i believe they should have their own End to End test)
+**However** it's a part of my scope to test the mapping from my business object to the external interface.
+
+Luckely **Rest APIs** are now a key standard to connect 2 systems.
+**http moxy** is borned to serve you as middle man between between 2 systems to listen and mock the response from the external party.
+
 Example:
-* We have a nice api from our backend that send sms through the api `POST /api/send/sms` with a simple body containing the message
-* The backend has a dependency with the sms provider, throught the send api service `POST http://sms-provider.test/sendSms` but it's not rest
-* *What we want to test is that our backend translates properly the calls from `POST /api/send/sms` to `POST http://sms-provider.test/sendSms`*
+* We have a nice api from our backend that send sms through the request`POST http://localhost/api/send/sms` with a simple body containing the message
+* This backend has a dependency with a sms provider and needs to use the external api service `POST http://sms-provider.io/sendSms`
+* *What we want is to test that our backend translates properly the calls from `POST /api/send/sms` to `POST http://sms-provider.test/sendSms`* 
+
+---
 
 ### How does it works ?
 
@@ -42,8 +54,8 @@ Don't forget to set both of them : `http_proxy` and `https_proxy`
 #### Usage
 
 Moxy shares on 2 endpoints:
-  * `/_/{request id}` (POST) : To create a mock related to a request id
-  * `/_/{request id}` (GET) : To inspect a mock related to a request id
+  * `/requests/{request id}` (POST) : To create a mock related to a request id
+  * `/requests/{request id}` (GET) : To inspect a mock related to a request id
 
 ### The mock endpoint
 
