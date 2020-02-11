@@ -1,24 +1,23 @@
-global.$ = {
-  config: {
-    port: 8080
-  }
+const AnyProxy = require('anyproxy')
+
+const options = {
+  port: process.env.PROXY_PORT || 8080,
+  rule: require('./server/rules'),
+  webInterface: {
+    enable: true,
+    webPort: process.env.ADMIN_PORT || 8000
+  },
+  throttle: 10000,
+  forceProxyHttps: true,
+  wsIntercept: false,
+  silent: false
 }
+const proxyServer = new AnyProxy.ProxyServer(options)
 
-const http = require('http')
-  .createServer(require('./server/app'))
-  .listen($.config.port, () => {
-    // $.log.info('Running server on :' + $.config.port)
-    // $.readiness.signalReady()
-  })
-
-process.on('SIGTERM', () => {
-  // $.log.info('Received SIGTERM. Exiting')
-  http && http.close(() => process.exit(0))
+proxyServer.on('ready', () => {
+  console.log('ready')
 })
+proxyServer.on('error', (e) => { /* */ })
+proxyServer.start() // Starting the proxy server
 
-process.on('uncaughtException', (err) => {
-  // $.log.info('Received uncaughtException. Exiting')
-  // $.log.info(err.stack)
-  console.log(err)
-  http && http.close(() => process.exit(1))
-})
+proxyServer.webServerInstance.app.use('/requests', require('./server/routes')) // Adding custom routes to the admin interface

@@ -18,5 +18,7 @@ ENV NODE_ENV=production
 
 COPY . .
 
+RUN npm run build
+
 CMD [ "npm", "start" ]
 

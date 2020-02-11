@@ -1,6 +1,0 @@
-headers:
-  server: cloudflare
-  content-type: text/plain;charset=TIS620
-body: |
-  STATUS=506
-  END=OK

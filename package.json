@@ -4,6 +4,7 @@
   "description": "A light mock server, meant to mock external dependencies to support the Quality Assurance",
   "main": "index.js",
   "scripts": {
+    "build": "anyproxy-ca -g",
     "start": "node index.js",
     "start:dev": "nodemon index.js",
     "lint:fix": "standard --fix",
@@ -21,10 +22,8 @@
   "author": "olivier rodomond",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.19.0",
+    "anyproxy": "^4.1.2",
     "express": "^4.17.1",
-    "helmet": "^3.21.2",
-    "js-yaml": "^3.13.1",
     "memory-cache": "^0.2.0"
   },
   "devDependencies": {
