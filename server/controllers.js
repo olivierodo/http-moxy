@@ -18,7 +18,7 @@ function createRequest (req, res, next) {
     .json(request)
 }
 
-function getRequest (req, res, next) {
+function getRequest (req, res) {
   const request = Storage.get(req.params.id) || {}
   res.json(request)
 }

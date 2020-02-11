@@ -17,7 +17,7 @@ const proxyServer = new AnyProxy.ProxyServer(options)
 proxyServer.on('ready', () => {
   console.log('ready')
 })
-proxyServer.on('error', (e) => { /* */ })
+proxyServer.on('error', () => { /* */ })
 proxyServer.start() // Starting the proxy server
 
 proxyServer.webServerInstance.app.use('/requests', require('./server/routes')) // Adding custom routes to the admin interface

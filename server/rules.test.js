@@ -4,7 +4,7 @@ beforeEach(() => {
 
 describe('#Services - storage', () => {
   test('Object initialization', () => {
-    let rules = require('./rules')
+    const rules = require('./rules')
     expect(Object.keys(rules)).toEqual(['summary', 'beforeSendRequest'])
     expect(rules.summary).toEqual('A rule to manage to mock by request id')
     expect(rules.beforeSendRequest).toBeInstanceOf(Function)
@@ -12,19 +12,18 @@ describe('#Services - storage', () => {
 
   describe('beforeSendRequest', () => {
     test('Return null when the "request-id" is not found in the header', () => {
-
       const Storage = require('./services/storage')
       jest.mock('./services/storage')
 
-      let req = {
+      const req = {
         requestOptions: {
           headers: {
           }
         }
       }
 
-      let rules = require('./rules')
-      let result = rules.beforeSendRequest(req)
+      const rules = require('./rules')
+      const result = rules.beforeSendRequest(req)
 
       expect(result.next().value).toBeNull()
       expect(Storage.get.mock.calls.length).toBe(0)
@@ -32,13 +31,12 @@ describe('#Services - storage', () => {
     })
 
     test('Return null when the request is not found in the storage', () => {
-
       const Storage = require('./services/storage')
       jest.mock('./services/storage')
 
       Storage.get.mockReturnValue(null)
 
-      let req = {
+      const req = {
         requestOptions: {
           headers: {
             'request-id': 'hello-555'
@@ -46,8 +44,8 @@ describe('#Services - storage', () => {
         }
       }
 
-      let rules = require('./rules')
-      let result = rules.beforeSendRequest(req)
+      const rules = require('./rules')
+      const result = rules.beforeSendRequest(req)
 
       expect(result.next().value).toBeNull()
       expect(Storage.get.mock.calls.length).toBe(1)
@@ -56,7 +54,6 @@ describe('#Services - storage', () => {
     })
 
     test('Return the mock when the request is found in the storage', () => {
-
       const Storage = require('./services/storage')
       jest.mock('./services/storage')
 
@@ -71,7 +68,7 @@ describe('#Services - storage', () => {
         }
       })
 
-      let req = {
+      const req = {
         requestOptions: {
           method: 'POST',
           hostname: 'test.qa.local',
@@ -83,8 +80,8 @@ describe('#Services - storage', () => {
         requestData: Buffer.from('hello world', 'utf8')
       }
 
-      let rules = require('./rules')
-      let result = rules.beforeSendRequest(req)
+      const rules = require('./rules')
+      const result = rules.beforeSendRequest(req)
 
       expect(result.next().value).toEqual({
         response: {
@@ -99,7 +96,7 @@ describe('#Services - storage', () => {
       expect(Storage.get.mock.calls.length).toBe(1)
       expect(Storage.get.mock.calls[0][0]).toBe('hello-555')
       expect(Storage.put.mock.calls.length).toBe(1)
-      let expectedRequest = {
+      const expectedRequest = {
         id: 'hello-555',
         method: 'POST',
         url: 'test.qa.local',

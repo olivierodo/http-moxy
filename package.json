@@ -1,7 +1,7 @@
 {
-  "name": "@restqa/e2e-mock-server",
+  "name": "@restqa/http-moxy",
   "version": "1.0.0",
-  "description": "A light mock server, meant to mock external dependencies to support the Quality Assurance",
+  "description": "A light mock server, meant to mock external dependencies to support the Quality Assurance Automation Testing",
   "main": "index.js",
   "scripts": {
     "build": "anyproxy-ca -g",
@@ -33,12 +33,25 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/restqa/e2e-mock-server.git"
+    "url": "git+https://github.com/restqa/http-moxy.git"
   },
   "bugs": {
-    "url": "https://github.com/restqa/e2e-mock-server/issues"
+    "url": "https://github.com/restqa/http-moxy/issues"
   },
-  "homepage": "https://github.com/restqa/e2e-mock-server#readme",
+  "homepage": "https://github.com/restqa/http-moxy#readme",
+  "jest": {
+    "globals": {
+      "$": true
+    },
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 90,
+        "lines": 90,
+        "statements": 0
+      }
+    }
+  },
   "standard": {
     "globals": [
       "$"
