@@ -1,6 +1,6 @@
 # HTTP Moxy (WIP)
 
-> A light mock http proxy tool to support your End to End automation test. The best way to  mock external API dependencies through (inspired by https://httpdump.io)
+> A light mock http proxy tool to support your End to End automation test. The best way to  mock external API dependencies (inspired by https://httpdump.io)
 
 ## Description
 
