@@ -1,42 +1,38 @@
 # HTTP Moxy (WIP)
 
-> A light mock http proxy tool to support your End to End automation test. The best way to  mock external API dependencies (inspired by https://httpdump.io)
+> A light mock http proxy tool to support your End to End automation test. The best way to  mock thrid parties API dependencies (inspired by https://httpdump.io)
 
 ## Description
 
 ### What is the problem we try to solve ?
 
-Test automation is the key component of a software quality, we all love it. However nowaday we all relay a lot on Saas services to fasten our product delivery (ex: google map, firebase, twilio, etc...)
-From a development perspective those tool are awesome, but from a test automation perspective... This is where the challenge start.
+Test automation is the key component of quality software, we all love it. However nowaday we relay more and more on Saas services to fasten our product delivery (ex: google map, firebase, twilio, etc...)
+From a development perspective if feels good to use reliable services, but from a test automation perspective... This is where the headach starts.
 
-**In the E2E automation tests world External dependencies are HELL!!!**
+**External dependencies are the main Pain in the a\**  of E2E automation test  !!!**
 
-This is how  **HTTP MOXY** starts growing in our mind... To solve that remaining pain.
+This is how  **HTTP MOXY** starts growing in our mind... We had to solve this remaining pain because it will just increase with the time.
 
-Basically **Http Moxy** is just a simple http proxy __BUT__ it provides an ability to mock the http request.
+Basically **Http Moxy** is just a simple http proxy on Steroid, It provides the ability to :
+  * listen to passing http request
+  * Mock any http response
 
-As a http proxy, *Moxy* doesn't bring any changes in  the way software engineers are coding.
-
+And the best is that as a http proxy, *Moxy* doesn't bring any changes into the way software engineers are coding.
 
 ### Fundamentals
 
-**Http Moxy** is born from the insight that as a business project QA, external dependencies are not a part of my scope... Why should i test again the external service (i believe they should have their own End to End test)
-**However** it's a part of my scope to test the mapping from my business object to the external interface.
+**Http Moxy** is born from the insight that as my test automation project,  i believe that external dependencies are not a part of my scope... Why should i test an external service (i believe the third party provider should have their own End to End test)
+**However** it's a part of my scope to test the mapping from my business object to this external interface.
 
-Luckely **Rest APIs** are now a key standard to connect 2 systems.
-**http moxy** is borned to serve you as middle man between between 2 systems to listen and mock the response from the external party.
+Luckely in 2020 **Rest API** is a key standard to connect 2 systems.
 
-Example:
-* We have a nice api from our backend that send sms through the request`POST http://localhost/api/send/sms` with a simple body containing the message
-* This backend has a dependency with a sms provider and needs to use the external api service `POST http://sms-provider.io/sendSms`
-* *What we want is to test that our backend translates properly the calls from `POST /api/send/sms` to `POST http://sms-provider.test/sendSms`* 
+After a few days of brainstorming **http moxy** was borned, based on [anyproxy](http://anyproxy.io) from alibaba. *Http Moxy**  will serve you as middle man between between 2 systems to listen and mock the response from the external party.
 
----
 
 ### How does it works ?
 
-The concept relies on the (https://microservices.io/patterns/observability/distributed-tracing.html)[Distributed tracing], each request has a tracable id that we can follow across the system...
-Once we understand the concept, we can see that have the ability to trace each request through a unique identifier. And this is exactly what we want to identify when we are running a test, we want to mock the response of the external dependency for happy and unhappy scenario.
+The concept relies on the [Distributed tracing](https://microservices.io/patterns/observability/distributed-tracing.html), each request has a tracable id that we can follow across the system...
+By having the ability to trace each request through a unique identifier, we can also refer to that same Id to mock the response of the external dependency for happy and unhappy scenario.
 
 ### Getting started
 
@@ -44,117 +40,124 @@ Once we understand the concept, we can see that have the ability to trace each r
 
 Installing the **http moxy** requires 2 steps:
  * Deploy the http moxy in your infrastructure or use the Saas version (https://moxy.restqa.io)
- * Set then `http_proxy` and `https_proxy` environment variable to the moxy server into your microservice
-   * export `http_proxy=http://url-of-your-just-deployed-moxy-server` in case you deploy your own moxy
-   * export `https_proxy=https://moxy.restqa.io` in case you use the saas version
+ * Inside the microservice that needs to connect an external service, set the proxies environment variable to point to the moxy server
+   * `export http_proxy=http://url-of-your-just-deployed-moxy-server:8080` in case you deploy your own moxy
+   * `export https_proxy=https://moxy.restqa.io` in case you want to use the saas version
 
 Don't forget to set both of them : `http_proxy` and `https_proxy`
 
-
 #### Usage
 
-Moxy shares on 2 endpoints:
-  * `/requests/{request id}` (POST) : To create a mock related to a request id
-  * `/requests/{request id}` (GET) : To inspect a mock related to a request id
+#### Ports
 
-### The mock endpoint
+The service is exposing 2 ports:
+  - 8080 the proxy port, you can configure it by setting up the `PROXY_PORT` environment variable
+  - 8000 the admin port, you can configure it by setting up the `ADMIN_PORT` environment variable
 
-The mock endpoint has only one  mandatory parameter:
-  * `x-request-id` in the header
+Moxy shares on 2 endpoints into the admin endpoint:
+  * `http://url-of-your-just-deployed-moxy-server:8080/requests/{request id}` (POST) : To create a mock related to a request id
+  * `http://url-of-your-just-deployed-moxy-server:8080/requests/{request id}` (GET) : To inspect a request related to a request id
 
-Now let's get into the real use case...
+#### Create a mock endpoint (POST /requests/:id)
 
+in the following use case we want to mock the response from our sms provider for unhappy scenarios
 
-We have the following Gherkin test:
-
-```
-Given the backend api gateway
-When i call the api POST /api/send/message
-  And the request body is "hello world"
-Then the status response is 200
-```
-
-It is a  nice test but we don't have any view of our the dependency interface.
-
-With moxy we can propose to write a use test like :
+We will call:
 
 ```
-Given the backend api gateway
-  And mock the request to POST https://my-sms-provider/sendSMS to response 200
-When i call the api POST /api/send/message
-  And the request body is "hello world"
-Then the status response is 200
-  And the mock get call with the request body '{ "my-message": "hello world"}'
+curl --request POST \
+  --url http://url-of-your-just-deployed-moxy-server:8000/requests/test-e2e-xxx-yyy-zzz \
+  --header 'content-type: application/json' \
+  --data '{
+	  "mock": {
+	  	"statusCode": 404,
+	  	"header": {
+	  		"Content-Type": "application/json"
+	  	},
+	  	"body": {
+        "message": "The phone number needs to be defined"
+      }
+	  }
+  }'
 ```
 
-Alright then under the wood, what is happening ?
+In the previous request the key informations are:
+  * We are creating a mock for a future request. This request will need to include the `x-request-id: test-e2e-xxx-yyy-zzz` in the request header to be catched by the mock
+  * The mock will repond with a 404 status code and a specific json response body
+  
+#### Using the Proxy
 
-In fact the only pre-requisite is to generate your own request id.
-In our example the request Id of our test will be `test-e2e-xxx-yyy-zzz`
+Once you will run your test, you will need to be sure the request Id : test-e2e-xxx-yyy-zzz, has been set in the request header of every transaction in your system to be sure that the **Moxy** can catch it.
 
-Then during the test step `And mock the request to POST https://my-sms-provider/sendSMS to response 200`, the code will ask to moxy the create a now mock by using the following api:
-
+Example if i call directly the sms provider:
 ```
-curl -X POST \
-  -H 'content-type: application/json` \
-  -d '{
-    "mock" : {
-      "status": 200,
-      "headers": {
-        "powered-by": "express"
-      },
-      "body": "OK"
-    }
-  }' \
-  https://moxy.restqa.io/_/test-e2e-xxx-yyy-zzz
-```
-
-The translation is simple we ask to create a mock for the request `test-e2e-xxx-yyy-zzz` with the response :
-  * status: 200
-  * headers : powered-by : "express"
-  * body: "OK"
-
-Yes you just understand all you need to do is to connect a mock to a request id...
-
-**However you need to ensure that your microservice add the `request-id` into the request headers otherwise moxy won't be able to mock the request**
-
-Afterwards to access to the result related to the test step `And the mock get call with the request body '{ "my-message": "hello world"}'`
-
-You will need to call get endpoint
-
-```
-curl -X GET https://moxy.restqa.io/_/test-e2e-xxx-yyy-zzz'
+curl 'https://my-sms-provider.com/send/message' \ 
+  -X POST \
+  -H 'Host: my-sms-provider.com' \
+  -H 'Accept: */*' \
+  -H 'content-type: application/x-www-form-urlencoded' \
+  -H 'request-id: test-e2e-xxx-yyy-zzz' \
+  -H 'Content-Length: 32' \
+  -d 'ACCOUNT=ww&PASSWORD=ww&OPTION=ww' 
+  -k  \
+  -x http://url-of-your-just-deployed-moxy-server:8080
 ```
 
-and get the  response:
+
+#### Inspect request endpoint (GET /requests/:id)
+ 
+On we catched a request after running our tests, we will want to inspect the request by using the same request id (in our case test-e2e-xxx-yyy-zzz)
+
+```
+curl --request GET \
+  --url http://url-of-your-just-deployed-moxy-server:8000/requests/test-e2e-xxx-yyy-zzz
+``
+
+And the response will look like:
 
 ```
 {
-  "request": {
-    "path": "/sms/send",
-    "headers": {
-      "content-type": "application/x-www-form-urlencoded",
-      "request-id": "e2e-test-q3ke0dl-oekjd-ww"
-    }
-    "body": {
-      "my-message": "hello world"
-    }
+  "id": "test-e2e-xxx-yyy-zzz",
+  "method": "POST",
+  "url": "my-sms-provider.com",
+  "path": "/send/message",
+  "headers": {
+    "Host": "my-sms-provider.com",
+    "User-Agent": "curl/7.64.1",
+    "Accept": "*/*",
+    "Cookie": "JSESSIONID=EB87299D9439D54FE71A7B5EBBF9FE8B; __cfduid=d72c2f067e0b9024049b8bbe48a7f28be1581260566",
+    "content-type": "application/x-www-form-urlencoded",
+    "x-request-id": "test-e2e-xxx-yyy-zzz",
+    "Content-Length": "32"
   },
-  "mock" : {
-    "status": 200,
-    "headers": {
-      "powered-by": "express"
-    },
-    "body": "OK"
+  "body": "ACCOUNT=ww&PASSWORD=ww&OPTION=ww",
+  "mock": {
+	  "statusCode": 404,
+	  "header": {
+	  	"Content-Type": "application/json"
+	  },
+	  "body": {
+      "message": "The phone number needs to be defined"
+    }
   }
 }
 ```
 
-You will have all element to know exactly what are the information that our internal microservice try to share with the external service.
+Here as you can see you will have all the request information available.
+
+All you need to do is to connect a mock to a request id...
+
+**Don't foprget you need to ensure that your microservice add the `x-request-id` into the request headers otherwise moxy won't be able to mock the request**
+
+### Important to Know
+
+* If you don't mock some request **Moxy** will just forward the request to the expected target
+* **Moxy** is Acting as a **MAN IN THE MIDDLE** so do not deploy it in PRODUCTION... 
+* A self certification is created by **Moxy** so you will need to ignore the ignore invalid self-signed ssl certificate
 
 ### Data persistancy
 
-TODO
+TODO 
 
 ### Distributed
 
@@ -162,50 +165,5 @@ TODO
 
 ### Monitoring Dashboard
 
-TODO
-
-
-
-
-
-
-
-
-## How to use
-
-
-Example:
-
-Let assume our mock server is deploy on our kubernetes farm. (internal url  : mock.default.svc.cluster.local)
-We are simulating a call coming from our microservice
-```
-curl -X POST  \
-  -H 'request-id: e2e-test-q3ke0dl-oekjd-ww' \
-  -H 'Content-Type: application/x-www-form-urlencoded' \
-  -d 'key=xxx-yyy-zzz' \ 
-  -d 'message=hello world' \ 
-  http://mock.default.svc.cluster.local/sms/send
-```
-
-As you saw the request id is `e2e-test-q3ke0dl-oekjd-ww` this will be the reference we will need in order to use the inspect endpoint.
-
-### The inspect endpoint
-
-Once the mock server has been used by microservices we will want to know what are the informations that has been sent...
-
-To inspect the request `e2e-test-q3ke0dl-oekjd-ww` we will do: 
-
-```
-curl -X GET http://mock.default.svc.cluster.local/_/e2e-test-q3ke0dl-oekjd-ww'
-```
-
-and get the following response:
-
-```
-```
-
-## Getting started
-
-
-
+You can access to a monitoring dashboard through the admin URL  on the port 8000 (default)
 
