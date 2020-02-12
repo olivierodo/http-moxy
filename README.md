@@ -111,7 +111,7 @@ On we catched a request after running our tests, we will want to inspect the req
 ```
 curl --request GET \
   --url http://url-of-your-just-deployed-moxy-server:8000/requests/test-e2e-xxx-yyy-zzz
-``
+```
 
 And the response will look like:
 
