@@ -1,0 +1,106 @@
+---
+# CONFIGMAP
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: moxy-restqa
+  labels:
+    app: mock_http_proxy
+data:
+  MICROSERVICE_ID: "988"
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moxy-restqa
+  labels:
+    app: mock_http_proxy
+spec:
+#  replicas: 1
+#  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: mock_http_proxy
+#  minReadySeconds: 10
+#  progressDeadlineSeconds: 120
+#  strategy:
+#    rollingUpdate:
+#      maxSurge: 50%
+#      maxUnavailable: 50%
+#    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: mock_http_proxy
+      name: moxy-restqa
+    spec:
+      containers:
+      - name: moxy
+        imagePullPolicy: Always
+        image: restqa/http-moxy:latest
+        env:
+        - name: PROXY_PORT
+          value: "8080"
+        - name: ADMIN_PORT
+          value: "8000"
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 8000
+          protocol: TCP
+        resources:
+          limits:
+             cpu: 100m
+             memory: 256Mi
+          requests:
+             cpu: 100m
+             memory: 100Mi
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          failureThreshold: 1
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+---
+# Service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: moxy-restqa
+  labels:
+    app: mock_http_proxy
+spec:
+  selector:
+    app: mock_http_proxy
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: proxy
+    - port: 8000
+      targetPort: 8000
+      protocol: TCP
+      name: admin
+  type: ClusterIP
+

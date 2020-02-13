@@ -1,5 +1,6 @@
 # The instructions for the first stage
 FROM node:10-alpine as builder
+MAINTAINER RestQa <team@restqa.io>
 
 RUN apk --no-cache add python make g++
 
