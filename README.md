@@ -54,7 +54,12 @@ Don't forget to set both of them : `http_proxy` and `https_proxy`
 
 __Small Demo (click to run the Video)__
 
-[![demo gif](https://raw.githubusercontent.com/restqa/http-moxy/master/assets/demo.gif)](https://raw.githubusercontent.com/restqa/http-moxy/master/assets/demo.mp4)
+<video width="320" height="240" controls>
+  <source src="https://raw.githubusercontent.com/restqa/http-moxy/master/assets/demo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+[![demo gif](https://raw.githubusercontent.com/restqa/http-moxy/master/assets/demo.png)](https://raw.githubusercontent.com/restqa/http-moxy/master/assets/demo.mp4)
 
 #### Ports
 
