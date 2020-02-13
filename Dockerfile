@@ -1,6 +1,11 @@
 # The instructions for the first stage
 FROM node:10-alpine as builder
-MAINTAINER RestQa <team@restqa.io>
+LABEL maintainer="RestQa <team@restqa.io>"
+LABEL app="http_proxy"
+LABEL name="http moxy"
+LABEL description="A light mock http proxy tool to support your End to End automation test. The best way to  mock thrid parties API dependencies"
+LABEL repository="https://github.com/restqa/http-moxy"
+LABEL url="https://restqa.io/http-moxy"
 
 RUN apk --no-cache add python make g++
 

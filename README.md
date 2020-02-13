@@ -167,3 +167,30 @@ TODO
 
 You can access to a monitoring dashboard through the admin URL  on the port 8000 (default)
 
+### Deployment
+
+#### Docker
+
+To run the container you just need to run :
+
+```
+docker run --name http-moxy  -p 8080:8080 -p 8000:8000 -it restqa/http-moxy 
+```
+
+Then you can access to the admin panel : http://localhost:8000
+And config your http_proxy environement variable : `export http_proxy:http://localhost:8080`
+
+#### Kubernetes
+
+Let say you want to deploy moxy in the `tests` namespace you will just need to run :
+
+```
+kubectl apply -f https://raw.githubusercontent.com/restqa/http-moxy/master/kubernetes-definition.yml -n tests
+```
+
+The definition file includes :
+ - config map
+ - deployment ( 1 replicas)
+ - service
+
+You can still get insipire from our example definition file : [kubernetes-definition.yml](kubernetes-defintion.yml)
