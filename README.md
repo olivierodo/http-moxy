@@ -9,7 +9,7 @@
 Test automation is the key component of quality software, we all love it. However nowaday we relay more and more on Saas services to fasten our product delivery (ex: google map, firebase, twilio, etc...)
 From a development perspective if feels good to use reliable services, but from a test automation perspective... This is where the headach starts.
 
-**External dependencies are the main Pain in the a\**  of E2E automation test  !!!**
+**External dependencies are the main Pain in the a\*\*  of E2E automation test  !!!**
 
 This is how  **HTTP MOXY** starts growing in our mind... We had to solve this remaining pain because it will just increase with the time.
 
