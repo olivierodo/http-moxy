@@ -52,6 +52,10 @@ Don't forget to set both of them : `http_proxy` and `https_proxy`
 
 #### Usage
 
+__Small Demo (click to run the Video)__
+
+[![demo gif](https://raw.githubusercontent.com/restqa/http-moxy/master/assets/demo.gif)](https://raw.githubusercontent.com/restqa/http-moxy/master/assets/demo.mp4)
+
 #### Ports
 
 The service is exposing 2 ports:
@@ -185,7 +189,7 @@ You can access to a monitoring dashboard through the admin URL  on the port 8000
 To run the container you just need to run :
 
 ```
-docker run --name http-moxy  -p 8080:8080 -p 8000:8000 -it restqa/http-moxy 
+docker run --name http-moxy  -p 8080:8080 -p 8000:8000 --rm restqa/http-moxy 
 ```
 
 Then you can access to the admin panel : http://localhost:8000
