@@ -193,4 +193,4 @@ The definition file includes :
  - deployment ( 1 replicas)
  - service
 
-You can still get insipire from our example definition file : [kubernetes-definition.yml](kubernetes-defintion.yml)
+You can still get insipire from our example definition file : [kubernetes-definition.yml](kubernetes-definition.yml)
