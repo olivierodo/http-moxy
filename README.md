@@ -34,6 +34,10 @@ After a few days of brainstorming **http moxy** was borned, based on [anyproxy](
 The concept relies on the [Distributed tracing](https://microservices.io/patterns/observability/distributed-tracing.html), each request has a tracable id that we can follow across the system...
 By having the ability to trace each request through a unique identifier, we can also refer to that same Id to mock the response of the external dependency for happy and unhappy scenario.
 
+#### Flow
+
+![flow chart](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent/restqa/http-moxy/blob/master/assets/flow.plantuml)
+
 ### Getting started
 
 #### Installation

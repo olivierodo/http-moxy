@@ -1,0 +1,33 @@
+@startuml
+participant "Automation Server"
+participant "Software to test"
+participant "**http moxy**" as httpmoxy
+participant "SMS provider"
+"Automation Server" -> "httpmoxy" : POST /requests/test-e2e-123456
+"Automation Server" <- "httpmoxy" : 201
+"Automation Server" -> "Automation Server" : Run the tests
+"Automation Server" -> "Software to test" : Send Request (x-request-id: test-e2e-123456)
+alt "Because a mock has been created for test-e2e-123456" case
+  "Software to test" -> "httpmoxy" : Send Request (x-request-id: test-e2e-123456)
+  "Software to test" <- "httpmoxy" : Mocked response
+else no mock has been defined
+  "Software to test" -> "httpmoxy" : Send Request (x-request-id: test-e2e-123456)
+  "httpmoxy" -> "SMS provider" : forward Request (x-request-id: noraml-call-546)
+  "httpmoxy" <- "SMS provider" : 200
+  "Software to test" <- "httpmoxy" : 200
+end
+
+"Automation Server" <- "Software to test" : 200
+
+alt "Because a mock has been created for test-e2e-123456" case
+  "Automation Server" -> "httpmoxy" : GET /requests/test-e2e-123456
+  "Automation Server" <- "httpmoxy" : 200
+  ref over "Automation Server"
+    We were able to acess
+    to all the detail
+    from the request : test-e2e-123456
+    so we can run our test assertion
+   end ref
+end
+  "Automation Server" -> "Automation Server" : Run assertion
+@enduml
