@@ -62,6 +62,13 @@ Moxy shares on 2 endpoints into the admin endpoint:
   * `http://url-of-your-just-deployed-moxy-server:8080/requests/{request id}` (POST) : To create a mock related to a request id
   * `http://url-of-your-just-deployed-moxy-server:8080/requests/{request id}` (GET) : To inspect a request related to a request id
 
+#### Configuration
+
+As mentioned you can :
+  * `PROXY_PORT` : The port to expose the proxy (default: 8080)
+  * `ADMIN_PORT` : The port to expose the admin (default: 8000)
+  * `HEADER_REQUEST_ID_PROPERTY` : The request header property you want to use to identify the request (default: x-request-id)
+
 #### Create a mock endpoint (POST /requests/:id)
 
 in the following use case we want to mock the response from our sms provider for unhappy scenarios
@@ -100,7 +107,7 @@ curl 'https://my-sms-provider.com/send/message' \
   -H 'Host: my-sms-provider.com' \
   -H 'Accept: */*' \
   -H 'content-type: application/x-www-form-urlencoded' \
-  -H 'request-id: test-e2e-xxx-yyy-zzz' \
+  -H 'x-request-id: test-e2e-xxx-yyy-zzz' \
   -H 'Content-Length: 32' \
   -d 'ACCOUNT=ww&PASSWORD=ww&OPTION=ww' 
   -k  \

@@ -3,7 +3,7 @@ const Storage = require('./services/storage')
 module.exports = {
   summary: 'A rule to manage to mock by request id',
   * beforeSendRequest (req) {
-    const reqId = req.requestOptions.headers['request-id']
+    const reqId = req.requestOptions.headers[process.env.HEADER_REQUEST_ID_PROPERTY || 'x-request-id']
     if (!reqId) return null
 
     let request = Storage.get(reqId)
