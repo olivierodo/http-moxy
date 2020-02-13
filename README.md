@@ -36,7 +36,7 @@ By having the ability to trace each request through a unique identifier, we can 
 
 #### Flow
 
-![flow chart](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent/restqa/http-moxy/blob/master/assets/flow.plantuml)
+![flow chart](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/restqa/http-moxy/master/assets/flow.plantuml)
 
 ### Getting started
 
