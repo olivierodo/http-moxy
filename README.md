@@ -1,4 +1,4 @@
-# HTTP Moxy (WIP)
+# HTTP Moxy
 
 > A light mock http proxy tool to support your End to End automation test. The best way to  mock thrid parties API dependencies (inspired by https://httpdump.io)
 
