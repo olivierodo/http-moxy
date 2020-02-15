@@ -9,7 +9,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Run a one-line script
-      run: echo Hello, world!
-    - name: Check typo
+    - name: Check links
       uses: restqa/404-links@master
+      with:
+        ignore: "https://moxy.restqa.io"

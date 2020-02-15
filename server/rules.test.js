@@ -41,7 +41,7 @@ describe('#Services - storage', () => {
       const req = {
         requestOptions: {
           headers: {
-            'foo': 'foo'
+            foo: 'foo'
           }
         }
       }
