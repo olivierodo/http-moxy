@@ -163,7 +163,7 @@ Here as you can see you will have all the request information available.
 
 All you need to do is to connect a mock to a request id...
 
-**Don't foprget you need to ensure that your microservice add the `x-request-id` into the request headers otherwise moxy won't be able to mock the request**
+**Don't forget you need to ensure that your microservice add the `x-request-id` into the request headers otherwise moxy won't be able to mock the request**
 
 ### Important to Know
 
