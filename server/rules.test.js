@@ -1,5 +1,6 @@
 beforeEach(() => {
   jest.resetModules()
+  delete process.env.HEADER_REQUEST_ID_PROPERTY
 })
 
 describe('#Services - storage', () => {
@@ -30,6 +31,30 @@ describe('#Services - storage', () => {
       expect(Storage.put.mock.calls.length).toBe(0)
     })
 
+    test('Return null when the request is not found in the storage but the header to check is not the default one', () => {
+      process.env.HEADER_REQUEST_ID_PROPERTY = 'foo'
+      const Storage = require('./services/storage')
+      jest.mock('./services/storage')
+
+      Storage.get.mockReturnValue(null)
+
+      const req = {
+        requestOptions: {
+          headers: {
+            'foo': 'foo'
+          }
+        }
+      }
+
+      const rules = require('./rules')
+      const result = rules.beforeSendRequest(req)
+
+      expect(result.next().value).toBeNull()
+      expect(Storage.get.mock.calls.length).toBe(1)
+      expect(Storage.get.mock.calls[0][0]).toBe('foo')
+      expect(Storage.put.mock.calls.length).toBe(0)
+    })
+
     test('Return null when the request is not found in the storage', () => {
       const Storage = require('./services/storage')
       jest.mock('./services/storage')
@@ -39,7 +64,7 @@ describe('#Services - storage', () => {
       const req = {
         requestOptions: {
           headers: {
-            'request-id': 'hello-555'
+            'x-request-id': 'hello-555'
           }
         }
       }
@@ -74,7 +99,7 @@ describe('#Services - storage', () => {
           hostname: 'test.qa.local',
           path: '/',
           headers: {
-            'request-id': 'hello-555'
+            'x-request-id': 'hello-555'
           }
         },
         requestData: Buffer.from('hello world', 'utf8')
@@ -102,7 +127,7 @@ describe('#Services - storage', () => {
         url: 'test.qa.local',
         path: '/',
         headers: {
-          'request-id': 'hello-555'
+          'x-request-id': 'hello-555'
         },
         body: 'hello world',
         mock: {
