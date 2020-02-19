@@ -210,3 +210,8 @@ The definition file includes :
  - service
 
 You can still get insipire from our example definition file : [kubernetes-definition.yml](kubernetes-definition.yml)
+
+## License
+
+[MIT License](./LICENSE)
+
