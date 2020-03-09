@@ -55,7 +55,7 @@
   },
   "standard": {
     "globals": [
-      "$"
+      "options"
     ],
     "env": [
       "jest"

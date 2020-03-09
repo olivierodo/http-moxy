@@ -1,8 +1,7 @@
 const AnyProxy = require('anyproxy')
 
-const options = {
+global.options = {
   port: process.env.PROXY_PORT || 8080,
-  rule: require('./server/rules'),
   webInterface: {
     enable: true,
     webPort: process.env.ADMIN_PORT || 8000
@@ -10,8 +9,15 @@ const options = {
   throttle: 10000,
   forceProxyHttps: true,
   wsIntercept: false,
-  silent: false
+  silent: false,
+  mqtt: {
+    host: process.env.MQTT_HOST || 'host.docker.internal',
+    topic: process.env.MQTT_TOPIC || 'restqa/api/moxy'
+  }
 }
+
+options.rule = require('./server/rules')
+
 const proxyServer = new AnyProxy.ProxyServer(options)
 
 proxyServer.on('ready', () => {

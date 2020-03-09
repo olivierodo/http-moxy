@@ -76,6 +76,12 @@ spec:
           periodSeconds: 30
           successThreshold: 1
           timeoutSeconds: 5
+      - name: mqtt
+        imagePullPolicy: Always
+        image: eclipse-mosquitto:1.6
+        ports:
+        - containerPort: 1883
+          protocol: TCP
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -102,5 +108,9 @@ spec:
       targetPort: 8000
       protocol: TCP
       name: admin
+    - port: 1883
+      targetPort: 1883
+      protocol: TCP
+      name: broker
   type: ClusterIP
 

@@ -1,7 +1,8 @@
 const Storage = require('./services/storage')
+const Broker = require('./services/broker')
 
 module.exports = {
-  summary: 'A rule to manage to mock by request id',
+  summary: 'Custom rule restQa',
   * beforeSendRequest (req) {
     const reqId = req.requestOptions.headers[process.env.HEADER_REQUEST_ID_PROPERTY || 'x-request-id']
     if (!reqId) return null
@@ -23,5 +24,19 @@ module.exports = {
     return {
       response: request.mock
     }
+  },
+  * beforeSendResponse (req, res) {
+    const msg = {
+      request: {
+        ...req.requestOptions,
+        body: Buffer.from(req.requestData).toString('utf-8')
+      },
+      response: {
+        statusCode: res.response.statusCode,
+        header: res.response.header,
+        body: res.response.body.toString('utf-8')
+      }
+    }
+    Broker.publish(msg)
   }
 }

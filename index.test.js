@@ -41,7 +41,11 @@ describe('#index', () => {
       throttle: 10000,
       forceProxyHttps: true,
       wsIntercept: false,
-      silent: false
+      silent: false,
+      mqtt: {
+        host: 'host.docker.internal',
+        topic: 'restqa/api/moxy'
+      }
     }
 
     expect(AnyProxy.ProxyServer.mock.calls.length).toEqual(1)
@@ -102,7 +106,11 @@ describe('#index', () => {
       throttle: 10000,
       forceProxyHttps: true,
       wsIntercept: false,
-      silent: false
+      silent: false,
+      mqtt: {
+        host: 'host.docker.internal',
+        topic: 'restqa/api/moxy'
+      }
     }
 
     expect(AnyProxy.ProxyServer.mock.calls.length).toEqual(1)

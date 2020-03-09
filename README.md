@@ -50,6 +50,17 @@ Installing the **http moxy** requires 2 steps:
 
 Don't forget to set both of them : `http_proxy` and `https_proxy`
 
+#### Environement variables
+
+
+| *Variable*                   | *Description*                                                                                | *Default*          |
+|:-----------------------------|:---------------------------------------------------------------------------------------------|:-------------------|
+| `PROXY_PORT`                 | The port to expose the proxy                                                                 | `8080`             |
+| `ADMIN_PORT`                 | The port to expose the administration                                                        | `8000`             |
+| `HEADER_REQUEST_ID_PROPERTY` |  The request header property you want to use to identify the request (default: x-request-id) | `x-request-id`     |
+| `MQTT_HOST`                  | The Host of mqtt broker                                                                      | `localhost`        |
+| `MQTT_TOPIC`                 | The topic used to send broker messages                                                       | `restqa/api/moxy`  |
+
 #### Usage
 
 __Small Demo (click to run the Video)__
@@ -66,13 +77,6 @@ The service is exposing 2 ports:
 Moxy shares on 2 endpoints into the admin endpoint:
   * `http://url-of-your-just-deployed-moxy-server:8080/requests/{request id}` (POST) : To create a mock related to a request id
   * `http://url-of-your-just-deployed-moxy-server:8080/requests/{request id}` (GET) : To inspect a request related to a request id
-
-#### Configuration
-
-As mentioned you can :
-  * `PROXY_PORT` : The port to expose the proxy (default: 8080)
-  * `ADMIN_PORT` : The port to expose the admin (default: 8000)
-  * `HEADER_REQUEST_ID_PROPERTY` : The request header property you want to use to identify the request (default: x-request-id)
 
 #### Create a mock endpoint (POST /requests/:id)
 
@@ -194,7 +198,7 @@ docker run --name http-moxy  -p 8080:8080 -p 8000:8000 --rm restqa/http-moxy
 ```
 
 Then you can access to the admin panel : http://localhost:8000
-And config your http_proxy environement variable : `export http_proxy:http://localhost:8080`
+And config your http_proxy environement variable : `export http_proxy=http://localhost:8080`
 
 #### Kubernetes
 

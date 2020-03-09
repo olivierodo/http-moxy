@@ -1,14 +1,16 @@
 beforeEach(() => {
   jest.resetModules()
   delete process.env.HEADER_REQUEST_ID_PROPERTY
+  global.options = {}
 })
 
 describe('#Services - storage', () => {
   test('Object initialization', () => {
     const rules = require('./rules')
-    expect(Object.keys(rules)).toEqual(['summary', 'beforeSendRequest'])
-    expect(rules.summary).toEqual('A rule to manage to mock by request id')
+    expect(Object.keys(rules)).toEqual(['summary', 'beforeSendRequest', 'beforeSendResponse'])
+    expect(rules.summary).toEqual('Custom rule restQa')
     expect(rules.beforeSendRequest).toBeInstanceOf(Function)
+    expect(rules.beforeSendResponse).toBeInstanceOf(Function)
   })
 
   describe('beforeSendRequest', () => {
@@ -141,6 +143,48 @@ describe('#Services - storage', () => {
       expect(Storage.put.mock.calls[0][0]).toEqual('hello-555')
       expect(Storage.put.mock.calls[0][1]).toEqual(expectedRequest)
       expect(Storage.put.mock.calls[0][2]).toEqual(600000)
+    })
+  })
+
+  describe('beforeSendResponse', () => {
+    test('Send message to broker', () => {
+      const Broker = require('./services/broker')
+      jest.mock('./services/broker')
+
+      Broker.publish = jest.fn()
+
+      const req = {
+        requestOptions: {
+          foo: 'bar'
+        },
+        requestData: 'test-body'
+      }
+
+      const res = {
+        response: {
+          statusCode: 200,
+          header: 'headers',
+          body: 'responseBody'
+        }
+      }
+
+      const rules = require('./rules')
+      const result = rules.beforeSendResponse(req, res)
+
+      expect(result.next().value).toBeUndefined()
+      expect(Broker.publish.mock.calls.length).toBe(1)
+      const expectedMsg = {
+        request: {
+          foo: 'bar',
+          body: Buffer.from('test-body').toString('utf-8')
+        },
+        response: {
+          statusCode: 200,
+          header: 'headers',
+          body: 'responseBody'.toString('utf-8')
+        }
+      }
+      expect(Broker.publish.mock.calls[0][0]).toEqual(expectedMsg)
     })
   })
 })
