@@ -112,5 +112,5 @@ spec:
       targetPort: 1883
       protocol: TCP
       name: broker
-  type: ClusterIP
+  type: NodePort
 
