@@ -60,8 +60,8 @@ spec:
              memory: 100Mi
         readinessProbe:
           httpGet:
-            path: /
-            port: 8000
+            path: /ready.k8s.http
+            port: 8080
           failureThreshold: 1
           initialDelaySeconds: 5
           periodSeconds: 5

@@ -4,6 +4,15 @@ const Broker = require('./services/broker')
 module.exports = {
   summary: 'Custom rule restQa',
   * beforeSendRequest (req) {
+    if (req.requestOptions.path === '/ready.k8s.http') {
+      return {
+        response: {
+          statusCode: 204,
+          header: { 'content-type': 'text/html' },
+          body: ''
+        }
+      }
+    }
     const reqId = req.requestOptions.headers[process.env.HEADER_REQUEST_ID_PROPERTY || 'x-request-id']
     if (!reqId) return null
 
@@ -39,4 +48,5 @@ module.exports = {
     }
     Broker.publish(msg)
   }
+
 }
