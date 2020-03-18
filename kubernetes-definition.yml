@@ -46,6 +46,8 @@ spec:
           value: "8080"
         - name: ADMIN_PORT
           value: "8000"
+        - name: MQTT_HOST
+          value: "localhost"
         ports:
         - containerPort: 8080
           protocol: TCP
@@ -53,8 +55,8 @@ spec:
           protocol: TCP
         resources:
           limits:
-             cpu: 100m
-             memory: 256Mi
+             cpu: 256m
+             memory: 100Mi
           requests:
              cpu: 100m
              memory: 100Mi
@@ -62,20 +64,20 @@ spec:
           httpGet:
             path: /ready.k8s.http
             port: 8080
-          failureThreshold: 1
-          initialDelaySeconds: 5
+          failureThreshold: 10
+          initialDelaySeconds: 10
           periodSeconds: 5
           successThreshold: 1
-          timeoutSeconds: 5
+          timeoutSeconds: 60
         livenessProbe:
           httpGet:
-            path: /
-            port: 8000
-          failureThreshold: 3
+            path: /ready.k8s.http
+            port: 8080
+          failureThreshold: 10
           initialDelaySeconds: 10
           periodSeconds: 30
           successThreshold: 1
-          timeoutSeconds: 5
+          timeoutSeconds: 60
       - name: mqtt
         imagePullPolicy: Always
         image: eclipse-mosquitto:1.6
@@ -112,5 +114,6 @@ spec:
       targetPort: 1883
       protocol: TCP
       name: broker
-  type: NodePort
+  #type: NodePort
+  type: LoadBalancer
 
